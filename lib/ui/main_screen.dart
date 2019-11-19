@@ -55,7 +55,9 @@ class _MainScreenState extends State<MainScreen> {
               color: Colors.green,
               child: Text("Solve - Step ${GridService.solvingStep+1}"),
               onPressed: (){
-
+                setState(() {
+                  GridService.solve();
+                });
               },
             ),
           ],

@@ -57,17 +57,17 @@ class TableWidget extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 border: border != null ? border : Border(),
-                color: _getColor(GridService.grid[i][j]),
+                color: _getColor(GridService.getCell(i, j).cellState),
               ),
               height: cellSize,
             ),
             onTap: (){
               if(GridService.solvingStep == 0) {
                 setState(() {
-                  if (GridService.grid[i][j] == CellState.open)
-                    GridService.grid[i][j] = CellState.closed;
+                  if (GridService.getCell(i, j).cellState == CellState.open)
+                    GridService.getCell(i, j).cellState = CellState.closed;
                   else
-                    GridService.grid[i][j] = CellState.open;
+                    GridService.getCell(i, j).cellState = CellState.open;
                 });
               }
             },
