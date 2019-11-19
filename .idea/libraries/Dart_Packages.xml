@@ -9,6 +9,13 @@
             </list>
           </value>
         </entry>
+        <entry key="auto_size_text">
+          <value>
+            <list>
+              <option value="C:/Dev/flutter/.pub-cache/hosted/pub.dartlang.org/auto_size_text-2.1.0/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="boolean_selector">
           <value>
             <list>
@@ -153,6 +160,7 @@
     </properties>
     <CLASSES>
       <root url="file://C:/Dev/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.3.0/lib" />
+      <root url="file://C:/Dev/flutter/.pub-cache/hosted/pub.dartlang.org/auto_size_text-2.1.0/lib" />
       <root url="file://C:/Dev/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-1.0.5/lib" />
       <root url="file://C:/Dev/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.1.2/lib" />
       <root url="file://C:/Dev/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.11/lib" />
