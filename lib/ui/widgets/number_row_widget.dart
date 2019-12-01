@@ -8,12 +8,14 @@ class NumberRowWidget extends StatelessWidget {
   final double cellSize;
   final double numbersSize;
   final int index;
+  final List<bool> locked;
 
   NumberRowWidget({
     @required this.horizontal,
     @required this.cellSize,
     @required this.numbersSize,
     @required this.index,
+    @required this.locked,
   });
 
   @override
@@ -21,6 +23,23 @@ class NumberRowWidget extends StatelessWidget {
     List<int> numbers = horizontal
         ? GridService.sideNumbers[index]
         : GridService.topNumbers[index];
+
+    List<Widget> children = [];
+    for(int i=0; i<numbers.length; i++){
+      children.add(
+        Expanded(
+          child: Center(
+            child: AutoSizeText(numbers[i].toString(),
+              style: TextStyle(
+                fontSize: 18.0,
+                color: locked[i] ? Colors.black : Colors.green,
+              ),
+              minFontSize: 12.0,
+            ),
+          ),
+        )
+      );
+    }
 
     return Container(
       margin: horizontal ? new EdgeInsets.symmetric(vertical: 1.0) : new EdgeInsets.symmetric(horizontal: 1.0),
@@ -31,30 +50,14 @@ class NumberRowWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0)
       ),
       child: horizontal
-          ? Row(
-        children: numbers.isNotEmpty ? numbers.map((number){
-          return Expanded(
-            child: Center(
-              child: AutoSizeText(number.toString(),
-                style: TextStyle(fontSize: 18.0),
-                minFontSize: 12.0,
-              ),
-            ),
-          );
-        }).toList().reversed.toList() : <Widget>[SizedBox()],
-      )
-          : Column(
-        children: numbers.isNotEmpty ? numbers.map((number){
-          return Expanded(
-            child: Center(
-              child: AutoSizeText(number.toString(),
-                style: TextStyle(fontSize: 18.0),
-                minFontSize: 12.0,
-              ),
-            ),
-          );
-        }).toList().reversed.toList() : <Widget>[SizedBox()],
-      ),
+        ? Row(
+            children: children.isNotEmpty
+              ? children.reversed.toList() : <Widget>[SizedBox()],
+          )
+        : Column(
+            children: children.isNotEmpty
+              ? children.reversed.toList() : <Widget>[SizedBox()],
+          ),
     );
   }
 }

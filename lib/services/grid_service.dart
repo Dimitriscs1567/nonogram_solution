@@ -17,15 +17,21 @@ class GridService{
   static final gridSize = 10;
   static List<Cell> grid;
   static List<List<int>> topNumbers;
+  static List<List<bool>> topNumbersSolves;
   static List<List<int>> sideNumbers;
+  static List<List<bool>> sideNumbersSolved;
   static int solvingStep;
+  static int solvingPosition;
 
   static void initializeGrid(){
     solvingStep = 0;
+    solvingPosition = 0;
 
     grid = [];
     topNumbers = [];
     sideNumbers = [];
+    topNumbersSolves = [];
+    sideNumbersSolved = [];
 
     for(int i=0; i<gridSize; i++) {
       topNumbers.add(List<int>());

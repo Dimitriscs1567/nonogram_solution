@@ -98,7 +98,8 @@ class _MainScreenState extends State<MainScreen> {
         if(GridService.solvingStep == 0) {
           setState(() {
             if (horizontal) {
-              if (_sidesLocked[index].length < 4 || !_sidesLocked[index].last) {
+              if ((_sidesLocked[index].length < 4 || !_sidesLocked[index].last)
+                  && !equalsMax(index, horizontal)) {
                 if (GridService.sideNumbers[index].isEmpty ||
                     _sidesLocked[index].last) {
                   _sidesLocked[index].add(false);
@@ -110,7 +111,8 @@ class _MainScreenState extends State<MainScreen> {
               }
             }
             else {
-              if (_topsLocked[index].length < 4 || !_topsLocked[index].last) {
+              if ((_topsLocked[index].length < 4 || !_topsLocked[index].last)
+                  && !equalsMax(index, horizontal)) {
                 if (GridService.topNumbers[index].isEmpty ||
                     _topsLocked[index].last) {
                   _topsLocked[index].add(false);
@@ -126,14 +128,16 @@ class _MainScreenState extends State<MainScreen> {
       },
       onLongPress: (){
         if(GridService.solvingStep == 0) {
-          if (horizontal) {
-            if (_sidesLocked[index].isNotEmpty)
-              _sidesLocked[index].last = true;
-          }
-          else {
-            if (_topsLocked[index].isNotEmpty)
-              _topsLocked[index].last = true;
-          }
+          setState(() {
+            if (horizontal) {
+              if (_sidesLocked[index].isNotEmpty)
+                _sidesLocked[index].last = true;
+            }
+            else {
+              if (_topsLocked[index].isNotEmpty)
+                _topsLocked[index].last = true;
+            }
+          });
         }
       },
       child: NumberRowWidget(
@@ -141,6 +145,7 @@ class _MainScreenState extends State<MainScreen> {
         numbersSize: numbersSize,
         cellSize: cellSize,
         index: index,
+        locked: horizontal ? _sidesLocked[index] : _topsLocked[index],
       ),
     );
   }
@@ -155,5 +160,32 @@ class _MainScreenState extends State<MainScreen> {
       _sidesLocked.add(List<bool>());
       _topsLocked.add(List<bool>());
     }
+  }
+
+  bool equalsMax(int index, bool horizontal) {
+    int sum = 0;
+
+    List<int> numbers = horizontal
+      ? GridService.sideNumbers[index]
+      : GridService.topNumbers[index];
+
+    numbers.forEach((number){
+      sum += number + 1;
+    });
+
+    sum--;
+
+    if(sum > 0 && sum == GridService.gridSize) {
+      if (horizontal && !_sidesLocked[index].last) {
+        _sidesLocked[index].last = true;
+      }
+      else if (!horizontal && !_topsLocked[index].last) {
+        _topsLocked[index].last = true;
+      }
+
+      return true;
+    }
+
+    return false;
   }
 }

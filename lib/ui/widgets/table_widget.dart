@@ -71,6 +71,14 @@ class TableWidget extends StatelessWidget {
                 });
               }
             },
+            onLongPress: (){
+              if(GridService.solvingStep == 0){
+                setState((){
+                  if (GridService.getCell(i, j).cellState != CellState.checked)
+                    GridService.getCell(i, j).cellState = CellState.checked;
+                });
+              }
+            },
           )
         );
       }
