@@ -104,6 +104,7 @@ class _MainScreenState extends State<MainScreen> {
                     _sidesLocked[index].last) {
                   _sidesLocked[index].add(false);
                   GridService.sideNumbers[index].add(1);
+                  GridService.sideNumbersSolved[index].add(false);
                 }
                 else {
                   GridService.sideNumbers[index].last++;
@@ -117,6 +118,7 @@ class _MainScreenState extends State<MainScreen> {
                     _topsLocked[index].last) {
                   _topsLocked[index].add(false);
                   GridService.topNumbers[index].add(1);
+                  GridService.topNumbersSolved[index].add(false);
                 }
                 else {
                   GridService.topNumbers[index].last++;

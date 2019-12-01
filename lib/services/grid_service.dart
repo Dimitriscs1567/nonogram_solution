@@ -17,7 +17,7 @@ class GridService{
   static final gridSize = 10;
   static List<Cell> grid;
   static List<List<int>> topNumbers;
-  static List<List<bool>> topNumbersSolves;
+  static List<List<bool>> topNumbersSolved;
   static List<List<int>> sideNumbers;
   static List<List<bool>> sideNumbersSolved;
   static int solvingStep;
@@ -30,12 +30,14 @@ class GridService{
     grid = [];
     topNumbers = [];
     sideNumbers = [];
-    topNumbersSolves = [];
+    topNumbersSolved = [];
     sideNumbersSolved = [];
 
     for(int i=0; i<gridSize; i++) {
       topNumbers.add(List<int>());
       sideNumbers.add(List<int>());
+      topNumbersSolved.add(List<bool>());
+      sideNumbersSolved.add(List<bool>());
 
       for (int j = 0; j < gridSize; j++) {
         grid.add(Cell(i, j, CellState.open));
@@ -48,21 +50,56 @@ class GridService{
   }
 
   static void solve(){
-    if(solvingStep < topNumbers.length) {
-      testRow(topNumbers[solvingStep], solvingStep, false);
-      solvingStep++;
+    bool startFromZero = solvingPosition == 0;
+    bool didSolve = false;
+
+    while(!didSolve) {
+      if (solvingPosition < topNumbers.length) {
+        if (testRow(solvingPosition, false)) {
+          solvingStep++;
+          didSolve = true;
+        }
+        solvingPosition++;
+      }
+      else if (solvingPosition < topNumbers.length + sideNumbers.length) {
+        if (testRow(solvingPosition - topNumbers.length, true)) {
+          solvingStep++;
+          didSolve = true;
+        }
+        solvingPosition++;
+      }
+      else {
+        solvingPosition = 0;
+      }
+
+      if(solvingPosition == 0) {
+        if(startFromZero && !didSolve){
+          didSolve = true;
+        }
+        else{
+          startFromZero = true;
+        }
+      }
     }
   }
 
-  static void testRow(List<int> row, int index, bool horizontal) {
+  static bool testRow(int index, bool horizontal) {
+    bool changes = false;
+
     List<List<Cell>> rowParts = getRowParts(index, horizontal);
-    topNumbers[index].reversed.forEach((number){
-      for(int i=0; i<rowParts.length; i++){
-        if(number <= rowParts[i].length && number >= (rowParts[i].length/2).floor() + 1){
+    List<int> numbers = horizontal ? sideNumbers[index] : topNumbers[index];
+
+    numbers.reversed.forEach((number) {
+      for (int i = 0; i < rowParts.length; i++) {
+        if (number <= rowParts[i].length &&
+            number >= (rowParts[i].length / 2).floor() + 1) {
+          changes = true;
           fillCells(rowParts[i], number);
         }
       }
     });
+
+    return changes;
   }
 
   static List<List<Cell>> getRowParts(int index, bool horizontal) {
@@ -70,13 +107,26 @@ class GridService{
 
     List<Cell> part = [];
     for(int i=0; i<gridSize; i++){
-      if(getCell(i, index).cellState == CellState.open) {
-        part.add(getCell(i, index));
+      if(!horizontal) {
+        if (getCell(i, index).cellState == CellState.open) {
+          part.add(getCell(i, index));
+        }
+        else {
+          if (part.isNotEmpty) {
+            result.add(part);
+            part = [];
+          }
+        }
       }
       else{
-        if(part.isNotEmpty){
-          result.add(part);
-          part = [];
+        if (getCell(index, i).cellState == CellState.open) {
+          part.add(getCell(index, i));
+        }
+        else {
+          if (part.isNotEmpty) {
+            result.add(part);
+            part = [];
+          }
         }
       }
     }
